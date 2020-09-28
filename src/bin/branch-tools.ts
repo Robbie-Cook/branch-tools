@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import BranchTools from "../BranchTools";
 import Enquirer from "enquirer";
 
