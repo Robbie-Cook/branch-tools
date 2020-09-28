@@ -1,0 +1,35 @@
+{
+  "name": "branch-tools",
+  "version": "0.0.0",
+  "bin": "node dist/bin/branch-tools.js",
+  "description": "A toolset for git branches",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --watch",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robbie-Cook/branch-tools.git"
+  },
+  "keywords": [
+    "branch",
+    "git",
+    "tools"
+  ],
+  "author": "Robbie Cook <https://github.com/Robbie-Cook>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Robbie-Cook/branch-tools/issues"
+  },
+  "homepage": "https://github.com/Robbie-Cook/branch-tools#readme",
+  "dependencies": {
+    "@robbie-cook/node-helper": "^2.0.5",
+    "@types/node": "^14.11.2",
+    "enquirer": "^2.3.6",
+    "inquirer": "^7.3.3",
+    "ts-node": "^9.0.0"
+  }
+}
