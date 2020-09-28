@@ -56,12 +56,12 @@ var BranchTools = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
-                        processedBranchList = unprocessedBranchList.filter(function (val) { return val && val !== "master" && val !== "production"; });
-                        console.log("\nMerged branches:\n");
+                        processedBranchList = unprocessedBranchList.filter(function (val) { return val && val !== "master" && val !== "production" && val !== "*"; });
                         if (processedBranchList.length === 0) {
-                            console.log("None! Your branches are clean\n");
+                            console.log("Nothing to do! Your branches are clean\n");
                             return [2 /*return*/];
                         }
+                        console.log("\nMerged branches:\n");
                         processedBranchList.forEach(function (branch) { return console.log(branch); });
                         return [4 /*yield*/, node_helper_1.default.input("\nWould you like to remove these branches? [y/N]:")];
                     case 1:

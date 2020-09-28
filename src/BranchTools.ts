@@ -30,14 +30,15 @@ export default class BranchTools {
       const unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
       // Careful with this! Do not include production in the output!
       const processedBranchList = unprocessedBranchList.filter(
-        (val) => val && val !== "master" && val !== "production"
+        (val) => val && val !== "master" && val !== "production" && val !== "*"
       );
 
-      console.log("\nMerged branches:\n");
       if (processedBranchList.length === 0) {
-        console.log("None! Your branches are clean\n");
+        console.log("Nothing to do! Your branches are clean\n");
         return;
       }
+      console.log("\nMerged branches:\n");
+
       processedBranchList.forEach((branch) => console.log(branch));
 
       const remove = await NodeHelper.input(
