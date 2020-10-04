@@ -1,6 +1,6 @@
 {
   "name": "branch-tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "bin": "./dist/bin/branch-tools.js",
   "description": "A toolset for git branches",
   "main": "dist/index.js",
