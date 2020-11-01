@@ -41,41 +41,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-var node_helper_1 = __importDefault(require("@robbie-cook/node-helper"));
+var node_extended_1 = __importDefault(require("node-extended"));
+var enquirer_1 = require("enquirer");
 var BranchTools = /** @class */ (function () {
     function BranchTools() {
     }
     /**
+     *
      * Main script
      */
     BranchTools.cleanBranches = function () {
-        var _this = this;
-        node_helper_1.default.execute("git branch --merged master").then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-            var unprocessedBranchList, processedBranchList, remove;
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
-                        processedBranchList = unprocessedBranchList.filter(function (val) { return val && val !== "master" && val !== "production" && val !== "*"; });
-                        if (processedBranchList.length === 0) {
-                            console.log("Nothing to do! Your branches are clean\n");
-                            return [2 /*return*/];
+                node_extended_1.default.execute("git branch --merged master").then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                    var unprocessedBranchList, processedBranchList, branches;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
+                                processedBranchList = unprocessedBranchList.filter(function (val) { return val && !val.match(/master/g) && !val.match(/production/g) && val !== "*"; });
+                                if (processedBranchList.length === 0) {
+                                    console.log("Nothing to do! Your branches are clean\n");
+                                    return [2 /*return*/];
+                                }
+                                console.log("\nMerged branches:\n");
+                                return [4 /*yield*/, enquirer_1.prompt({
+                                        name: "value",
+                                        message: "Pick branches to delete",
+                                        type: "multiselect",
+                                        choices: processedBranchList.map(function (item) { return ({
+                                            name: item,
+                                            value: item,
+                                        }); }),
+                                    })];
+                            case 1:
+                                branches = _a.sent();
+                                console.log(branches);
+                                return [2 /*return*/];
                         }
-                        console.log("\nMerged branches:\n");
-                        processedBranchList.forEach(function (branch) { return console.log(branch); });
-                        return [4 /*yield*/, node_helper_1.default.input("\nWould you like to remove these branches? [y/N]:")];
-                    case 1:
-                        remove = _a.sent();
-                        if (!node_helper_1.default.isAnswerYes(remove)) {
-                            return [2 /*return*/];
-                        }
-                        return [4 /*yield*/, this.removeBranches(processedBranchList)];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                    });
+                }); });
+                return [2 /*return*/];
             });
-        }); });
+        });
     };
     /**
      * Remove git branches
@@ -94,7 +103,7 @@ var BranchTools = /** @class */ (function () {
                     _a.label = 2;
                 case 2:
                     _a.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, node_helper_1.default.execute("git branch -d " + branch)];
+                    return [4 /*yield*/, node_extended_1.default.execute("git branch -d " + branch)];
                 case 3:
                     _a.sent();
                     return [3 /*break*/, 5];

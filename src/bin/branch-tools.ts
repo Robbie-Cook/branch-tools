@@ -23,7 +23,7 @@ async function run() {
   });
 
   if (response.option === Direction.cleanBranches) {
-    BranchTools.cleanBranches();
+    await BranchTools.cleanBranches();
   }
 }
 
