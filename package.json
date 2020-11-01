@@ -10,7 +10,8 @@
     "test": "npm run build && node dist/bin/branch-tools.js",
     "start": "tsc --watch",
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "preversion": "npm run build",
+    "deploy": "npx np"
   },
   "repository": {
     "type": "git",
