@@ -3,6 +3,11 @@
 import BranchTools from "../BranchTools";
 import Enquirer from "enquirer";
 
+import updateNotifier from "update-notifier";
+import pkg from "../../package.json";
+
+updateNotifier({ pkg }).notify();
+
 const Direction = {
   cleanBranches: "clean branches",
 };
