@@ -1,6 +1,7 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-import NodeHelper from "@robbie-cook/node-helper";
+import NodeExtended from "node-extended";
+import { prompt } from "enquirer";
 
 export default class BranchTools {
   /**
@@ -11,7 +12,7 @@ export default class BranchTools {
     for (const branch of branches) {
       console.log(`Removing ${branch}...`);
       try {
-        await NodeHelper.execute(`git branch -d ${branch}`);
+        await NodeExtended.execute(`git branch -d ${branch}`);
       } catch (err) {
         console.error(err);
       }
@@ -22,15 +23,21 @@ export default class BranchTools {
   };
 
   /**
+   *
    * Main script
    */
-  static cleanBranches() {
-    NodeHelper.execute("git branch --merged master").then(async (value) => {
+  static async cleanBranches() {
+    // TODO: remove 'then'
+    NodeExtended.execute("git branch --merged master").then(async (value) => {
       // Split the branches into a list
       const unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
       // Careful with this! Do not include production in the output!
       const processedBranchList = unprocessedBranchList.filter(
-        (val) => val && val !== "master" && val !== "production" && val !== "*"
+        (val) =>
+          val &&
+          !val.match(/master/g) &&
+          !val.match(/production/g) &&
+          val !== "*"
       );
 
       if (processedBranchList.length === 0) {
@@ -39,16 +46,24 @@ export default class BranchTools {
       }
       console.log("\nMerged branches:\n");
 
-      processedBranchList.forEach((branch) => console.log(branch));
+      // processedBranchList.forEach((branch) => console.log(branch));
 
-      const remove = await NodeHelper.input(
-        "\nWould you like to remove these branches? [y/N]:"
-      );
-      if (!NodeHelper.isAnswerYes(remove)) {
+      const branches = await prompt<{ value: Array<string> }>({
+        name: "value",
+        message: "Pick branches to delete",
+        type: "multiselect",
+        choices: processedBranchList.map((item) => ({
+          name: item,
+          value: item,
+        })),
+      });
+
+      const remove = await NodeExtended.input("\nAre you sure? [y/N]:");
+      if (!NodeExtended.isAnswerYes(remove)) {
         return;
       }
 
-      await this.removeBranches(processedBranchList);
+      await this.removeBranches(branches.value);
     });
   }
 }

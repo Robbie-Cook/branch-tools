@@ -4,7 +4,8 @@ export default class BranchTools {
      */
     static removeBranches: (branches: Array<string>) => Promise<void>;
     /**
+     *
      * Main script
      */
-    static cleanBranches(): void;
+    static cleanBranches(): Promise<void>;
 }
