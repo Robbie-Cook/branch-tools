@@ -11,7 +11,7 @@
     "start": "tsc --watch",
     "build": "tsc",
     "preversion": "npm run build",
-    "deploy": "npx np"
+    "deploy": "npx np --no-tests"
   },
   "repository": {
     "type": "git",
