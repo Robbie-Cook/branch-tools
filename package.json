@@ -2,7 +2,7 @@
   "name": "branch-tools",
   "version": "0.1.1",
   "bin": {
-    "branch-tools": "dist/bin/branch-tools.js"
+    "branch-tools": "dist/src/bin/branch-tools.js"
   },
   "description": "A toolset for git branches",
   "main": "dist/index.js",
@@ -30,11 +30,16 @@
   "homepage": "https://github.com/Robbie-Cook/branch-tools#readme",
   "dependencies": {
     "@robbie-cook/node-helper": "^2.0.5",
+    "@types/listr": "^0.14.2",
     "@types/node": "^14.11.2",
+    "@types/tiny-async-pool": "^1.0.0",
     "@types/update-notifier": "^5.0.0",
     "enquirer": "^2.3.6",
     "inquirer": "^7.3.3",
+    "listr": "^0.14.3",
+    "meow": "^8.0.0",
     "node-extended": "^0.1.0",
+    "tiny-async-pool": "^1.2.0",
     "ts-node": "^9.0.0",
     "update-notifier": "^5.0.1"
   },

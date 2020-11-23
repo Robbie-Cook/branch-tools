@@ -2,6 +2,23 @@
 /* eslint-disable no-restricted-syntax */
 import NodeExtended from "node-extended";
 import { prompt } from "enquirer";
+import fs from "fs";
+import asyncPool from "tiny-async-pool";
+import Listr from "listr";
+
+/**
+ * Filter non-git repos
+ */
+
+function isGitRepo(path: string): boolean {
+  if (fs.lstatSync(path).isDirectory() && path !== "node_modules") {
+    const subfiles = fs.readdirSync(path);
+    if (subfiles.includes(".git")) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export default class BranchTools {
   /**
@@ -20,6 +37,33 @@ export default class BranchTools {
     }
 
     console.log("Done!\n");
+  };
+
+  /**
+   * Git pull a directory
+   */
+
+  private static async pull(file: string): Promise<string | undefined> {
+    if (isGitRepo(file)) {
+      return NodeExtended.execute(`(cd ${file} && git pull)`);
+    }
+  }
+
+  /**
+   * Sync all repos
+   */
+  static syncRepos = async () => {
+    const files = fs.readdirSync(".");
+
+    const tasks = files
+      .filter((file) => isGitRepo(file))
+      .map((file) => ({
+        title: `Fetching ${file}...`,
+        task: () => BranchTools.pull(file),
+      }));
+
+    const listrTasks = new Listr(tasks, { concurrent: 10 });
+    await listrTasks.run();
   };
 
   /**
