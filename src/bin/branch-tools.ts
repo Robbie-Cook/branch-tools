@@ -20,11 +20,18 @@ type valueof<T> = T[keyof T];
  * Main CLI entry function
  */
 async function run() {
-  const cli = meow();
+  const cli = meow({
+    flags: {
+      "switch-branch": {
+        type: "string",
+        alias: "s",
+      },
+    },
+  });
   // If action specified on the command line, run it
   if (cli.input?.length > 0) {
     if (cli.input.includes("sync")) {
-      await BranchTools.syncRepos();
+      await BranchTools.syncRepos(cli.flags["switch-branch"]);
     } else if (cli.input.includes("clean")) {
       await BranchTools.cleanBranches();
     }
@@ -42,7 +49,7 @@ async function run() {
     if (response.option === Option.cleanBranches) {
       await BranchTools.cleanBranches();
     } else if (response.option === Option.syncRepos) {
-      await BranchTools.syncRepos();
+      await BranchTools.syncRepos(cli.flags["switch-branch"]);
     }
   }
 }

@@ -43,7 +43,11 @@ export default class BranchTools {
    * Git pull a directory
    */
 
-  private static async pull(file: string): Promise<string | undefined> {
+  private static async pull(file: string, branch?: string): Promise<string | undefined> {
+    if (branch) {
+      console.log(`Switching branch to '${branch}'`)
+      return NodeExtended.execute(`(cd ${file} && git checkout ${branch})`);
+    }
     if (isGitRepo(file)) {
       return NodeExtended.execute(`(cd ${file} && git pull)`);
     }
@@ -52,14 +56,17 @@ export default class BranchTools {
   /**
    * Sync all repos
    */
-  static syncRepos = async () => {
+  static syncRepos = async (branch?: string) => {
     const files = fs.readdirSync(".");
 
     const tasks = files
       .filter((file) => isGitRepo(file))
       .map((file) => ({
         title: `Fetching ${file}...`,
-        task: () => BranchTools.pull(file),
+        task: async () => {
+
+          await BranchTools.pull(file, branch);
+        },
       }));
 
     const listrTasks = new Listr(tasks, { concurrent: 10 });
