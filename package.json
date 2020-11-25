@@ -1,6 +1,6 @@
 {
   "name": "branch-tools",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "bin": {
     "branch-tools": "dist/src/bin/branch-tools.js"
   },
