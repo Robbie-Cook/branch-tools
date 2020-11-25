@@ -69,7 +69,7 @@ export default class BranchTools {
         },
       }));
 
-    const listrTasks = new Listr(tasks, { concurrent: 10 });
+    const listrTasks = new Listr(tasks, { concurrent: 10, renderer: "verbose" });
     await listrTasks.run();
   };
 
