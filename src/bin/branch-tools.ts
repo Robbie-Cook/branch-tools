@@ -30,8 +30,11 @@ async function run() {
   });
   // If action specified on the command line, run it
   if (cli.input?.length > 0) {
+    console.log('flag', cli.flags)
     if (cli.input.includes("sync")) {
-      await BranchTools.syncRepos(cli.flags["switch-branch"]);
+      // See https://github.com/sindresorhus/meow/issues/138 and slap them.
+      // @ts-ignore
+      await BranchTools.syncRepos(cli.flags.switchBranch);
     } else if (cli.input.includes("clean")) {
       await BranchTools.cleanBranches();
     }

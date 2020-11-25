@@ -44,6 +44,7 @@ export default class BranchTools {
    */
 
   private static async pull(file: string, branch?: string): Promise<string | undefined> {
+    console.log('hello!');
     if (branch) {
       console.log(`Switching branch to '${branch}'`)
       return NodeExtended.execute(`(cd ${file} && git checkout ${branch})`);
@@ -69,7 +70,7 @@ export default class BranchTools {
         },
       }));
 
-    const listrTasks = new Listr(tasks, { concurrent: 10, renderer: "verbose" });
+    const listrTasks = new Listr(tasks, { concurrent: 10, renderer: "default" });
     await listrTasks.run();
   };
 
