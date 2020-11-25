@@ -7,7 +7,7 @@
   "description": "A toolset for git branches",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npm run build && node dist/bin/branch-tools.js",
+    "test": "npm run build && node dist/src/bin/branch-tools.js",
     "start": "tsc --watch",
     "build": "tsc",
     "preversion": "npm run build",
