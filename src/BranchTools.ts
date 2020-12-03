@@ -43,9 +43,12 @@ export default class BranchTools {
    * Git pull a directory
    */
 
-  private static async pull(file: string, branch?: string): Promise<string | undefined> {
+  private static async pull(
+    file: string,
+    branch?: string
+  ): Promise<string | undefined> {
     if (branch) {
-      console.log(`Switching branch to '${branch}'`)
+      console.log(`Switching branch to '${branch}'`);
       return NodeExtended.execute(`(cd ${file} && git checkout ${branch})`);
     }
     if (isGitRepo(file)) {
@@ -59,18 +62,23 @@ export default class BranchTools {
   static syncRepos = async (branch?: string) => {
     const files = fs.readdirSync(".");
 
-    const tasks = files
-      .filter((file) => isGitRepo(file))
-      .map((file) => ({
+    const filteredSubrepos = files.filter((file) => isGitRepo(file));
+    if (filteredSubrepos?.length > 0) {
+      const tasks = filteredSubrepos.map((file) => ({
         title: `Fetching ${file}...`,
         task: async () => {
-
           await BranchTools.pull(file, branch);
         },
       }));
 
-    const listrTasks = new Listr(tasks, { concurrent: 10, renderer: "default" });
-    await listrTasks.run();
+      const listrTasks = new Listr(tasks, {
+        concurrent: 10,
+        renderer: "default",
+      });
+      await listrTasks.run();
+    } else {
+      console.log('No direct subrepos found. Are you sure you are running this command from the right directory')
+    }
   };
 
   /**
