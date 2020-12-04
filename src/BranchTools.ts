@@ -77,7 +77,7 @@ export default class BranchTools {
       });
       await listrTasks.run();
     } else {
-      console.log('No direct subrepos found. Are you sure you are running this command from the right directory')
+      console.log('No direct subrepos found. Are you sure you are running this command from the right directory?')
     }
   };
 
