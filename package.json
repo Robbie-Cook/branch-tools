@@ -37,7 +37,7 @@
     "enquirer": "^2.3.6",
     "inquirer": "^7.3.3",
     "listr": "^0.14.3",
-    "meow": "^8.0.0",
+    "meow": "^10.1.1",
     "node-extended": "^1.1.0",
     "tiny-async-pool": "^1.2.0",
     "ts-node": "^9.0.0",
