@@ -67,7 +67,12 @@ export default class BranchTools {
       const tasks = filteredSubrepos.map((file) => ({
         title: `Fetching ${file}...`,
         task: async () => {
-          await BranchTools.pull(file, branch);
+          try {
+            await BranchTools.pull(file, branch);
+          } catch (e) {
+            console.error(`There was a problem pulling '${file}:'`);
+            console.error(e);
+          }
         },
       }));
 
@@ -77,7 +82,9 @@ export default class BranchTools {
       });
       await listrTasks.run();
     } else {
-      console.log('No direct subrepos found. Are you sure you are running this command from the right directory?')
+      console.log(
+        "No direct subrepos found. Are you sure you are running this command from the right directory?"
+      );
     }
   };
 
