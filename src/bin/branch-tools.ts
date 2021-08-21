@@ -20,14 +20,26 @@ type valueof<T> = T[keyof T];
  * Main CLI entry function
  */
 async function run() {
-  const cli = meow({
-    flags: {
-      "switch-branch": {
-        type: "string",
-        alias: "s",
+  const cli = meow(
+    `
+  Usage
+  $ npx branch-tools <sync|clean>
+
+  Options
+    --switch-branch, -s  Switch branch on sync
+
+  Examples
+    $ npx branch-tools sync
+  `,
+    {
+      flags: {
+        "switch-branch": {
+          type: "string",
+          alias: "s",
+        },
       },
-    },
-  });
+    }
+  );
   // If action specified on the command line, run it
   if (cli.input?.length > 0) {
     if (cli.input.includes("sync")) {
