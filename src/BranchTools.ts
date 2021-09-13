@@ -48,10 +48,25 @@ export default class BranchTools {
     branch?: string
   ): Promise<string | undefined> {
     if (branch) {
+      const branchExists = await (
+        await NodeExtended.execute(
+          `(cd ${file} && git branch --list ${branch})`
+        )
+      )
+        .toString()
+        .includes(branch);
+
+      if (!branchExists) {
+        console.log(`${branch} does not exist on ${file}. Continuing.`);
+        return;
+      }
+
       console.log(`Switching branch to '${branch}'`);
-      return NodeExtended.execute(`(cd ${file} && git checkout ${branch})`);
+      await NodeExtended.execute(`(cd ${file} && git checkout ${branch})`);
     }
+
     if (isGitRepo(file)) {
+      console.log(`Pulling ${file}@${branch}`);
       return NodeExtended.execute(`(cd ${file} && git pull)`);
     }
   }
@@ -59,7 +74,7 @@ export default class BranchTools {
   /**
    * Sync all repos
    */
-  static syncRepos = async (branch?: string) => {
+  static syncRepos = async (branch?: string, runSynchronously = true) => {
     const files = fs.readdirSync(".");
 
     const filteredSubrepos = files.filter((file) => isGitRepo(file));
@@ -69,6 +84,7 @@ export default class BranchTools {
         task: async () => {
           try {
             await BranchTools.pull(file, branch);
+            console.log(`Fetching '${branch}' completed`);
           } catch (e) {
             console.error(`There was a problem pulling '${file}:'`);
             console.error(e);
@@ -76,11 +92,20 @@ export default class BranchTools {
         },
       }));
 
-      const listrTasks = new Listr(tasks, {
-        concurrent: 10,
-        renderer: "default",
-      });
-      await listrTasks.run();
+      if (runSynchronously) {
+        for (const task of tasks) {
+          console.log(task.title);
+          await task.task();
+          console.log("\n");
+        }
+      } 
+      // else {
+      //   const listrTasks = new Listr(tasks, {
+      //     concurrent: 10,
+      //     renderer: "default",
+      //   });
+      //   await listrTasks.run();
+      // }
     } else {
       console.log(
         "No direct subrepos found. Are you sure you are running this command from the right directory?"
