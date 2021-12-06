@@ -98,7 +98,7 @@ export default class BranchTools {
           await task.task();
           console.log("\n");
         }
-      } 
+      }
       // else {
       //   const listrTasks = new Listr(tasks, {
       //     concurrent: 10,
@@ -117,44 +117,42 @@ export default class BranchTools {
    *
    * Main script
    */
-  static async cleanBranches() {
-    // TODO: remove 'then'
-    NodeExtended.execute("git branch --merged master").then(async (value) => {
-      // Split the branches into a list
-      const unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
-      // Careful with this! Do not include production in the output!
-      const processedBranchList = unprocessedBranchList.filter(
-        (val) =>
-          val &&
-          !val.match(/master/g) &&
-          !val.match(/production/g) &&
-          val !== "*"
-      );
+  static async cleanBranches(allBranches = false) {
+    const value = allBranches
+      ? await NodeExtended.execute("git branch")
+      : await NodeExtended.execute("git branch --merged master");
 
-      if (processedBranchList.length === 0) {
-        console.log("Nothing to do! Your branches are clean\n");
-        return;
-      }
-      console.log("\nMerged branches:\n");
+    // Split the branches into a list
+    const unprocessedBranchList = value.replace(/[\n]/g, "").split(" ");
+    // Careful with this! Do not include production in the output!
+    const processedBranchList = unprocessedBranchList.filter(
+      (val) =>
+        val && !val.match(/master/g) && !val.match(/production/g) && val !== "*"
+    );
 
-      // processedBranchList.forEach((branch) => console.log(branch));
+    if (processedBranchList.length === 0) {
+      console.log("Nothing to do! Your branches are clean\n");
+      return;
+    }
+    console.log("\nMerged branches:\n");
 
-      const branches = await prompt<{ value: Array<string> }>({
-        name: "value",
-        message: "Pick branches to delete",
-        type: "multiselect",
-        choices: processedBranchList.map((item) => ({
-          name: item,
-          value: item,
-        })),
-      });
+    // processedBranchList.forEach((branch) => console.log(branch));
 
-      const remove = await NodeExtended.input("\nAre you sure? [y/N]:");
-      if (!NodeExtended.isAnswerYes(remove)) {
-        return;
-      }
-
-      await this.removeBranches(branches.value);
+    const branches = await prompt<{ value: Array<string> }>({
+      name: "value",
+      message: "Pick branches to delete",
+      type: "multiselect",
+      choices: processedBranchList.map((item) => ({
+        name: item,
+        value: item,
+      })),
     });
+
+    const remove = await NodeExtended.input("\nAre you sure? [y/N]:");
+    if (!NodeExtended.isAnswerYes(remove)) {
+      return;
+    }
+
+    await this.removeBranches(branches.value);
   }
 }

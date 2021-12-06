@@ -40,3 +40,11 @@ Run
 npx branch-tools sync
 ```
 from inside a folder that *contains* git folders.
+
+## Testing
+
+To test this locally, clone this repo, and then run
+
+```bash
+node <path_to_package>/dist/src/bin/branch-tools.js
+```

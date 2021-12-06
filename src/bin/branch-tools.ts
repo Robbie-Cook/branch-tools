@@ -37,6 +37,12 @@ async function run() {
           type: "string",
           alias: "s",
         },
+
+        // Clean flags
+        all: {
+          type: "string",
+          alias: "s",
+        },
       },
     }
   );
@@ -47,7 +53,11 @@ async function run() {
       // @ts-ignore
       await BranchTools.syncRepos(cli.flags.switchBranch);
     } else if (cli.input.includes("clean")) {
-      await BranchTools.cleanBranches();
+      if (Object.keys(cli.flags).includes("all")) {
+        await BranchTools.cleanBranches(true);
+      } else {
+        await BranchTools.cleanBranches();
+      }
     }
   } else {
     // Prompt user for action
