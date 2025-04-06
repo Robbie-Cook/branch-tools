@@ -1,3 +1,23 @@
+# DEPRECATED
+
+This repository is deprecated. Please use git aliases instead for branch management.
+You can add aliases to your `~/gitconfig` file to add common git commands. These are avaliable as `git <command>`.
+
+Here's a collection of handy aliases:
+```
+[alias]
+    # Cleans branches
+    clean-branches = "!f() { \
+        git branch --merged | egrep -v '(^\\*|main|develop)' | xargs git branch -d; \
+    }; f"
+    # Untested -- sync submodules
+    sync-submodules = "!f() { \
+        git submodule update --init --recursive; \
+    }; f"
+    
+```
+
+
 # Branch Tools
 
 ## Usage:
