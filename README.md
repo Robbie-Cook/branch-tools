@@ -18,7 +18,9 @@ Here's a collection of handy aliases:
 ```
 
 
-# Branch Tools
+
+
+## Branch Tools
 
 ## Usage:
 
