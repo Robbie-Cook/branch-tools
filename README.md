@@ -1,4 +1,4 @@
-# DEPRECATED
+# Deprecated
 
 This repository is deprecated. Please use git aliases instead for branch management.
 You can add aliases to your `~/gitconfig` file to add common git commands. These are avaliable as `git <command>`.
